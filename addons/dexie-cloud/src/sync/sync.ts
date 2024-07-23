@@ -46,7 +46,8 @@ export function sync(
   return _sync
     .apply(this, arguments)
     .then((result) => {
-      if (!syncOptions?.justCheckIfNeeded) { // && syncOptions?.purpose !== 'push') {
+      if (!syncOptions?.justCheckIfNeeded && 
+        db.cloud.syncState.getValue().phase !== 'pre-sync-check') { // && syncOptions?.purpose !== 'push') {
         db.syncStateChangedEvent.next({
           phase: 'in-sync',
         });
@@ -99,6 +100,15 @@ async function _sync(
     isInitialSync: false,
   }
 ): Promise<boolean> {
+  if (options.preSyncCheck) {
+    db.syncStateChangedEvent.next({
+      phase: 'pre-sync-check',
+    });
+    const checkResult = await options.preSyncCheck();
+    if (!checkResult.shouldSync) {
+      return false;
+    }
+  }
   if (!justCheckIfNeeded) {
     console.debug('SYNC STARTED', { isInitialSync, purpose });
   }

@@ -1,4 +1,4 @@
-export type SyncStatePhase = "initial" | "not-in-sync" | "pushing" | "pulling" | "in-sync" | 'error' | 'offline';
+export type SyncStatePhase = "initial" | "pre-sync-check" | "not-in-sync" | "pushing" | "pulling" | "in-sync" | 'error' | 'offline';
 export type SyncStatus = "not-started" | "connecting" | "connected" | "disconnected" | "error" | "offline";
 export interface SyncState {
   status: SyncStatus;

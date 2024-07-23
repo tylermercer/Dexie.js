@@ -13,6 +13,10 @@ export interface DexieCloudOptions {
   // Whether to require authentication or opt-in to it using db.cloud.login()
   requireAuth?: boolean | LoginHints
 
+  // An asynchronous function to run before syncing to verify if syncing should be allowed to occur.
+  // Useful for checking if the client is outdated before syncing.
+  preSyncCheck?: () => Promise<{ shouldSync: boolean, message: string }>;
+
   // Whether to use service worker. Combine with registering your own service
   // worker and import "dexie-cloud-addon/dist/modern/service-worker.min.js" from it.
   tryUseServiceWorker?: boolean;
